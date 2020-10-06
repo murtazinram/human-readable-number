@@ -1,6 +1,4 @@
 class Numbers {
-    map
-
     constructor() {
         this.map = new Map();
         this.map.set(1, 'one')
@@ -30,8 +28,6 @@ class Numbers {
         this.map.set(70, 'seventy')
         this.map.set(80, 'eighty')
         this.map.set(90, 'ninety')
-        this.map.set(100, 'hundred')
-        this.map.set(1000, 'thousand')
     }
 
     getValue(key) {
@@ -45,35 +41,29 @@ function getDecimal(str, text, nums) {
     if (decimal < 20) text = nums.getValue(Number.parseInt(decimal))
     else {
         text = nums.getValue(Number.parseInt(str[0].concat('0')))
-        if (str[1] !== '0') {
-            text += ' ' + nums.getValue(Number.parseInt(str[1]))
-        }
+        if (str[1] !== '0') text += ' ' + nums.getValue(Number.parseInt(str[1]))
     }
     return text;
 }
 
-module.exports =
-    function toReadable(number) {
-        const nums = new Numbers()
-        let str = number.toString().split('');
-        let text = ''
-        switch (str.length) {
-            case 1: { // 0 from 9
-                if (str[0] === '0') text = 'zero'
-                else text = nums.getValue(Number.parseInt(str))
-                break
-            }
-            case 2: { // decimal
-                text = getDecimal(str, text, nums);
-                break
-            }
-            case 3: { // hundred
-                text = nums.getValue(Number.parseInt(`${str[0]}`)).concat(` ${nums.getValue(100)} `)
-                str.shift()
-                text += getDecimal(str, text, nums);
-                break
-            }
-        }
-        return text.replace(/undefined/, ' ').trim()
+module.exports = function toReadable(number) {
+    const nums = new Numbers()
+    let str = number.toString().split('');
+    let text = ''
+    switch (str.length) {
+        case 1: // 0 from 9
+            if (str[0] === '0') text = 'zero'
+            else text = nums.getValue(Number.parseInt(str))
+            break
+        case 2: // decimal
+            text = getDecimal(str, text, nums);
+            break
+        case 3: // hundred
+            text = nums.getValue(Number.parseInt(`${str[0]}`)).concat(` hundred `)
+            str.shift()
+            text += getDecimal(str, text, nums);
+            break
     }
+    return text.replace(/undefined/, ' ').trim()
+}
 
