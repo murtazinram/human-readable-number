@@ -64,6 +64,6 @@ module.exports = function toReadable(number) {
             text += getDecimal(str, text, nums);
             break
     }
-    return text.replace(/undefined/, ' ').trim()
+    return text.replace(/undefined/, '').trim()
 }
 
